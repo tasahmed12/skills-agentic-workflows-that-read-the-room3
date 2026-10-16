@@ -1,36 +1,41 @@
 ---
 name: update-github-info
-description: Refresh GitHub Info with practical updates from the GitHub Blog and Changelog.
+description: Draft website updates for Mona's GitHub Info site from official GitHub sources.
 on:
-  schedule: daily
   workflow_dispatch:
-permissions:
-  contents: read
-tools:
-  edit: true
-network:
-  allowed:
-    - github.blog
-    - github.com
+  schedule:
+    - cron: '17 9 * * *'
 safe-outputs:
   create-pull-request:
-    title-prefix: "[GitHub Info] "
-    draft: false
-    allowed-files:
-      - "site/content/github-info.md"
+    title-prefix: "[mona] "
+    draft: true
+    fallback-as-issue: false
+engine:
+  id: copilot
+  copilot-sdk: true
+tools:
+  edit:
+  web-fetch:
+network:
+  allowed:
+    - github.com
+    - github.blog
 ---
 
-# Update GitHub Info
+# Update Mona's GitHub Info website
 
-Read `notes/mona-notes.md` and the current `site/content/github-info.md` before making changes.
+Read `notes/mona-notes.md` before making changes.
 
-Fetch both of these official sources:
+Use these sources:
+- `notes/mona-notes.md`
+- GitHub Blog: https://github.blog/latest/
+- GitHub Changelog: https://github.blog/changelog/
 
-- https://github.blog/latest/
-- https://github.blog/changelog/
+Update `site/content/github-info.md` with concise,
+practical updates for readers and include source context when content comes
+from the GitHub Blog or GitHub Changelog.
 
-Find recent updates that are useful to developers and fit Mona's practical editorial angle. Verify details and dates from the source pages, avoid duplicating items already covered, and keep each summary short. Update only `site/content/github-info.md`; include a direct source link for every item derived from the GitHub Blog or Changelog. Preserve the existing editorial guidance and themes.
-
-If there are no relevant, verifiable updates to add, leave the file unchanged and use `noop` with a brief explanation.
-
-When the file changes, open a pull request using the configured safe output. Keep the PR description concise, summarize the updates with their source links, and ask Mona to review. Do not write directly to the default branch.
+Open a pull request for Mona to review.
+Use a pull request title that mentions Mona or GitHub Info.
+Do not write directly to `main`;
+rely on `safe-outputs` with `create-pull-request`.
